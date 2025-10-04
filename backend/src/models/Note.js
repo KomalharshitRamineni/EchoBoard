@@ -11,7 +11,7 @@ const noteSchema = new mongoose.Schema({
     },
     content:{
         type:String,
-        required: True
+        required: true
     },
 },
 {timestamps:true}// created at/updated at
