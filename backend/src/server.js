@@ -1,8 +1,14 @@
 import express from "express"
+import dotenv from "dotenv";
+import cors from "cors"
+
+
 import noteRoutes from "./routes/noteRoutes.js"
 import {connectDB} from "./config/db.js"
-import dotenv from "dotenv";
+
 import rateLimiter from "./middleware/rateLimiter.js";
+
+
 
 dotenv.config(); // Needed to hide stuff like db connection details, api keys etc...
 
@@ -19,7 +25,13 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 
-// Middle ware
+// Middle ware order matters
+app.use(cors({
+    origin: "http://localhost:5173"
+})
+);
+
+
 
 app.use(express.json());
 app.use(rateLimiter)
@@ -28,6 +40,8 @@ app.use(rateLimiter)
 //     console.log(`Req method is ${req.method} & Req URL is ${req.url}`);
 //     next();
 // })
+
+
 
 
 
