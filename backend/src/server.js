@@ -42,3 +42,4 @@ connectDB().then(() => {
 });
 
 
+// slightly changed such taht only listen after connecting to database
