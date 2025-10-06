@@ -56,8 +56,20 @@ const NoteDetailPage = () => {
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {
-      console.log("Error saving the note:", error);
-      toast.error("Failed to update note");
+      if (error.response.status === 422){
+        toast.error("Your note contains inappropriate content", {
+          duration: 4000,
+          icon: "🚫",
+        });
+      } else if (error.response.status === 400){
+        toast.error("Your note is missing content", {
+          duration: 4000,
+          icon: "❗",
+        });
+      } else {
+        console.log("Error saving the note:", error);
+        toast.error("Failed to update note");
+      }
     } finally {
       setSaving(false);
     }

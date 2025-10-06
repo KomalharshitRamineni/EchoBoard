@@ -33,7 +33,17 @@ const CreatePage = () => {
       if (error.response.status === 429) {
         toast.error("Slow down! You're creating notes too fast", {
           duration: 4000,
-          icon: "💀",
+          icon: "⏳",
+        });
+      } else if (error.response.status === 422){
+        toast.error("Your note contains inappropriate content", {
+          duration: 4000,
+          icon: "🚫",
+        });
+      } else if (error.response.status === 400){
+        toast.error("Your note is missing content", {
+          duration: 4000,
+          icon: "❗",
         });
       } else {
         toast.error("Failed to create note");

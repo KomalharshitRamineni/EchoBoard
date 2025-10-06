@@ -2,6 +2,8 @@ import Note from "../models/Note.js";
 import { containsBannedWords } from "../lib/utils.js";
 
 
+
+
 export async function getAllNotes(req,res){
     try {
         const notes = await Note.find().sort({createdAt:-1}) // newst first
@@ -34,7 +36,7 @@ export async function createNote(req,res){
 
 
         if (containsBannedWords(title) || containsBannedWords(content)) {
-        return res.status(400).json({
+        return res.status(422).json({
             message: "Your note contains prohibited or hateful language.",
         });
         };
@@ -60,7 +62,7 @@ export async function updateNote(req,res) {
         };
 
         if (containsBannedWords(title) || containsBannedWords(content)) {
-        return res.status(400).json({
+        return res.status(422).json({
             message: "Your note contains prohibited or hateful language.",
         });
         };
