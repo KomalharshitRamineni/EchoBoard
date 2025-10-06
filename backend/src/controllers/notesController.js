@@ -1,4 +1,6 @@
 import Note from "../models/Note.js";
+import { containsBannedWords } from "../lib/utils.js";
+
 
 export async function getAllNotes(req,res){
     try {
@@ -24,8 +26,21 @@ export async function getNoteById(req,res) {
 export async function createNote(req,res){
     try {
         const {title,content} = req.body;
-        const note = new Note({title,content});
+        
 
+        if (!title || !content) {
+        return res.status(400).json({ message: "Title and content are required." });
+        };
+
+
+        if (containsBannedWords(title) || containsBannedWords(content)) {
+        return res.status(400).json({
+            message: "Your note contains prohibited or hateful language.",
+        });
+        };
+
+
+        const note = new Note({title,content});
         const savedNote = await note.save();
         res.status(201).json(savedNote);
 
@@ -38,6 +53,19 @@ export async function createNote(req,res){
 export async function updateNote(req,res) {
     try {
         const {title,content} = req.body;
+
+
+        if (!title || !content) {
+        return res.status(400).json({ message: "Title and content are required." });
+        };
+
+        if (containsBannedWords(title) || containsBannedWords(content)) {
+        return res.status(400).json({
+            message: "Your note contains prohibited or hateful language.",
+        });
+        };
+
+
         await Note.findByIdAndUpdate(req.params.id,{title,content});
         res.status(200).json({message:"Note updated successfully"});
     } catch (error) {
