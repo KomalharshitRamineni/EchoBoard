@@ -18,7 +18,6 @@ dotenv.config(); // Needed to hide stuff like db connection details, api keys et
 
 
 // If we want to run with a script, npm run dev, add to package
-// What is npm? - 
 
 
 const app = express();
