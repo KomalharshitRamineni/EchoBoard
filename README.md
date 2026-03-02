@@ -88,7 +88,7 @@ All routes are prefixed with `/api`.
 | PUT    | `/notes/:id`   | Update an existing note         |
 | DELETE | `/notes/:id`   | Delete a note                   |
 
-Responses with status `422` indicate that banned words were detected, while `429` signifies the global rate limit was exceeded.
+Responses with status `422` indicate something wrong with the input either length or content safety failure, while `429` signifies the global rate limit was exceeded.
 
 ## Production build
 To generate and serve the optimized frontend from the backend, run:
@@ -105,8 +105,10 @@ The app is currently deployed on Render at https://echoboard-d6xs.onrender.com/.
 
 ## Troubleshooting
 - **429 Too Many Requests:** Wait for the sliding window to reset (100 requests per 60 seconds globally).
-- **422 Unprocessable Entity:** Remove profanity from the note title or content.
+- **422 Unprocessable Entity:** Remove profanity from the note title or content or issue with content length.
+- **503 Content Moderation Error:** The AI moderation provider is currently rate-limited or unreachable. Retry after a short delay.
 - **500 Internal Server Error:** Double-check your MongoDB URI and Redis credentials, then restart the backend server.
+
 
 ## License
 This project is distributed under the ISC license. See the original repository for more details.

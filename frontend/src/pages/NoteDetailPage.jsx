@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
+import { handleApiError } from "../lib/apiErrors";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
@@ -11,7 +11,6 @@ const NoteDetailPage = () => {
   const [saving, setSaving] = useState(false);
 
   const navigate = useNavigate();
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const NoteDetailPage = () => {
         const res = await api.get(`/notes/${id}`);
         setNote(res.data);
       } catch (error) {
-        console.log("Error in fetching note", error);
+        console.error("Error fetching note:", error);
         toast.error("Failed to fetch the note");
       } finally {
         setLoading(false);
@@ -38,7 +37,7 @@ const NoteDetailPage = () => {
       toast.success("Note deleted");
       navigate("/");
     } catch (error) {
-      console.log("Error deleting the note:", error);
+      console.error("Error deleting note:", error);
       toast.error("Failed to delete note");
     }
   };
@@ -50,26 +49,12 @@ const NoteDetailPage = () => {
     }
 
     setSaving(true);
-
     try {
       await api.put(`/notes/${id}`, note);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {
-      if (error.response.status === 422){
-        toast.error("Your note contains inappropriate content", {
-          duration: 4000,
-          icon: "🚫",
-        });
-      } else if (error.response.status === 400){
-        toast.error("Your note is missing content", {
-          duration: 4000,
-          icon: "❗",
-        });
-      } else {
-        console.log("Error saving the note:", error);
-        toast.error("Failed to update note");
-      }
+      handleApiError(error, "Failed to update note");
     } finally {
       setSaving(false);
     }
@@ -137,4 +122,5 @@ const NoteDetailPage = () => {
     </div>
   );
 };
+
 export default NoteDetailPage;
