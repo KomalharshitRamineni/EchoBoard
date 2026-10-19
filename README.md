@@ -1,20 +1,18 @@
 # EchoBoard
 
-Live site: https://echoboard-d6xs.onrender.com/
-
 ## Overview
 EchoBoard is a full-stack note taking application built with the MERN stack. It provides a fast and focused writing experience, automatic persistence to MongoDB, and a production-ready deployment that serves the Vite frontend from the Express backend. Requests to the API are rate limited through Upstash Redis and every note is screened for profanity or hateful language before it is saved.
 
 ## Features
 -  **Create, edit, and delete notes** with a clean, responsive UI built using React, Tailwind CSS, and daisyUI.
 -  **Persistent storage** via MongoDB with timestamps to keep notes ordered by their last update.
--  **Content moderation** powered by `bad-words` and `leo-profanity` to prevent toxic submissions.
+-  **Content moderation** powered by the `bad-words` and `leo-profanity` word filters plus Azure AI Content Safety, to block toxic submissions.
 -  **Global rate limiting** using Upstash Redis to keep the public API resilient against bursts of traffic.
 -  **Production-ready build**: the Express server statically serves the optimized Vite build when `NODE_ENV=production`.
 
 ## Tech stack
 - **Frontend:** React, Vite, Tailwind CSS, daisyUI, React Router, Axios, react-hot-toast
-- **Backend:** Node.js, Express, Mongoose, Upstash Redis
+- **Backend:** Node.js, Express, Mongoose, Upstash Redis, Azure AI Content Safety
 - **Database:** MongoDB Atlas or any MongoDB compatible instance
 
 ## Project structure
@@ -48,6 +46,8 @@ Create a `.env` file inside the `backend` directory with the following variables
 MONGO_URI=your-mongodb-connection-string
 UPSTASH_REDIS_REST_URL=your-upstash-rest-url
 UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+AZURE_CONTENT_SAFETY_ENDPOINT=your-content-safety-endpoint
+AZURE_CONTENT_SAFETY_KEY=your-content-safety-key
 NODE_ENV=development
 PORT=5001
 ```
@@ -101,7 +101,7 @@ npm start
 `npm run build` installs dependencies in both apps and produces the Vite build inside `frontend/dist`. `npm start` launches the Express server on the configured `PORT`, serving the static assets and exposing the REST API.
 
 ## Deployment
-The app is currently deployed on Render at https://echoboard-d6xs.onrender.com/. Deployments simply need the environment variables above configured in the hosting provider. The backend serves the static frontend bundle automatically when `NODE_ENV=production`.
+The app was deployed on Render. Deployments need the environment variables above configured in the hosting provider. The backend serves the static frontend bundle automatically when `NODE_ENV=production`.
 
 ## Troubleshooting
 - **429 Too Many Requests:** Wait for the sliding window to reset (100 requests per 60 seconds globally).
