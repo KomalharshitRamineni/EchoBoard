@@ -110,5 +110,8 @@ The app was deployed on Render. Deployments need the environment variables above
 - **500 Internal Server Error:** Double-check your MongoDB URI and Redis credentials, then restart the backend server.
 
 
+## Acknowledgements
+Based on a MERN stack tutorial. I extended it with the word filter, Azure AI Content Safety moderation and the error handling around them.
+
 ## License
-This project is distributed under the ISC license. See the original repository for more details.
+This project is distributed under the ISC license.
